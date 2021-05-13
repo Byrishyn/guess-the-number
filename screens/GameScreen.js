@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { View, Text, StyleSheet, Button, Alert } from "react-native"
 
 import NumberContainer from "../components/NumberContainer"
@@ -16,22 +16,32 @@ const generateRandomBetween = (min, max, exclude) => {
 }
 
 const GameScreen = props => {
+    const [rounds, setRounds] = useState(0);
     const [currentGuess, setCurrentGuess] = useState(generateRandomBetween(1, 100, props.userChoice))
     const currentLow = useRef(1);
     const currentHigh = useRef(100);
 
+    const { onGameOver, userChoice } = props;
+
     const nextGuessHandler = direction => {
-        if ((direction === "lower" && currentGuess < props.userChoice ) || (direction === "greater" && currentGuess > props.userChoice)){
-            Alert.alert("Don't lie !", "This is not true", [{text:"Sorry...", style:"cancel"}]);
+        if ((direction === "lower" && currentGuess < props.userChoice) || (direction === "greater" && currentGuess > props.userChoice)) {
+            Alert.alert("Don't lie !", "This is not true", [{ text: "Sorry...", style: "cancel" }]);
             return;
         }
-        if (direction === "lower"){
+        if (direction === "lower") {
             currentHigh.current = currentGuess;
         } else {
             currentLow.current = currentGuess;
         }
-        setCurrentGuess(generateRandomBetween(currentLow.current,currentHigh.current,currentGuess));
+        setCurrentGuess(generateRandomBetween(currentLow.current, currentHigh.current, currentGuess));
+        setRounds(curRounds=> curRounds +1);
     }
+
+    useEffect(() => {
+        if (currentGuess === userChoice) {
+            onGameOver(rounds);
+        }
+    }, [currentGuess, onGameOver, userChoice])
 
     return (
         <View style={styles.screen}>
@@ -51,10 +61,10 @@ const styles = StyleSheet.create({
         padding: 10,
         alignItems: "center"
     },
-    buttonContainer:{
+    buttonContainer: {
         flexDirection: "row",
         justifyContent: "space-around",
-        marginTop:20,
+        marginTop: 20,
         width: 300,
         maxWidth: "80%"
     }
