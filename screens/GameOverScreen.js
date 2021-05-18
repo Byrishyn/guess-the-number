@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Image, StyleSheet, Button } from 'react-native'
+import { View, Image, StyleSheet, Button, Text } from 'react-native'
 
 import BodyText from "../components/BodyText"
 import TitleText from "../components/TitleText"
+import Colors from '../constants/colors';
 
 const GameOverScreen = props => {
     return (
@@ -10,13 +11,19 @@ const GameOverScreen = props => {
             <TitleText>The game is over !</TitleText>
             <View style={styles.imageContainer}>
                 <Image
-                    //source={require("../assets/success.png")}
-                    source={{uri:"https://cdn.pixabay.com/photo/2016/05/05/23/52/mountain-summit-1375015_960_720.jpg"}}
+                    source={require("../assets/success.png")}
+                    //source={{uri:"https://cdn.pixabay.com/photo/2016/05/05/23/52/mountain-summit-1375015_960_720.jpg"}}
                     style={styles.image}
                 />
             </View>
-            <BodyText>Number of rounds : {props.numberRounds}</BodyText>
-            <BodyText>The number was : {props.userNumber}</BodyText>
+            <View style={styles.resultContainer}>
+                <BodyText style={styles.resultText}>
+                    It took your phone{" "}
+                    <Text style={styles.highlight}>{props.numberRounds}</Text>
+                    {" "}rounds to guess the number{" "}
+                    <Text style={styles.highlight}>{props.userNumber}</Text>
+                </BodyText>
+            </View>
             <Button title="New Game" onPress={props.onNewGame} />
         </View>
     )
@@ -40,6 +47,18 @@ const styles = StyleSheet.create({
         borderColor: "black",
         overflow: "hidden",
         marginVertical: 30,
+    },
+    highlight: {
+        color: Colors.primary,
+        fontFamily: "open-sans-bold"
+    },
+    resultContainer: {
+        marginHorizontal: 30,
+        marginVertical: 15,
+    },
+    resultText: {
+        textAlign: "center",
+        fontSize: 20,
     }
 })
 
