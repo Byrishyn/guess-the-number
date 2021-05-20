@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, View, Alert, Button, Keyboard } from 'react-native'
 
 import BodyText from "../components/BodyText"
@@ -9,10 +9,17 @@ import Colors from "../constants/colors"
 
 const GuessScreen = props => {
     const [enteredValue, setEnteredValue] = useState("")
-    const computerNumber = useRef(Math.floor(Math.random() * 100))
+    //const computerNumber = useRef(Math.floor(Math.random() * 100))
+    const computerNumber = useRef(25)
     const [computerAnswer, setComputerAnswer] = useState("?")
+    const [currentGuess, setCurrentGuess] = useState()
+    const [pastGuesses, setPastGuesses] = useState([])
 
-
+    useEffect(() => {
+        if (currentGuess === computerNumber.current) {
+            props.onGameOver(pastGuesses.length, currentGuess);
+        }
+    }, [currentGuess])
 
     const numberInputHandler = inputText => {
         setEnteredValue(inputText.replace(/[^0-9]/g, ""))
@@ -29,12 +36,13 @@ const GuessScreen = props => {
             return;
         }
         setEnteredValue("");
+        setPastGuesses(curr => [choosenNumber, ...curr])
         if (choosenNumber > computerNumber.current) {
             setComputerAnswer("-")
         } else if (choosenNumber < computerNumber.current) {
             setComputerAnswer("+")
         } else {
-            Alert.alert("Felicitations !", "You guessed the correct number", [{ text: "Okay", style: "destructive", onPress: resetInputHandler }])
+            setCurrentGuess(choosenNumber)
         }
         Keyboard.dismiss();
     }

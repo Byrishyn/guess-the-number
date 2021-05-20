@@ -43,6 +43,11 @@ export default function App() {
     setGuessRounds(nbrRounds);
   }
 
+  const guessGameOverHander = (nbrRounds, value) => {
+    setGuessRounds(nbrRounds);
+    setUserNumber(value)
+  }
+
   const gameChoiceHandler = (choice) => {
     setComputerGuess(choice)
   }
@@ -52,7 +57,7 @@ export default function App() {
   if (computerGuess === true) {
     content = <StartGameScreen onStartGame={gameStartHandler} />
   } else if (computerGuess === false) {
-    content = <GuessScreen />
+    content = <GuessScreen onGameOver ={guessGameOverHander}/>
   }
 
   if (userNumber && guessRounds <=0) {
