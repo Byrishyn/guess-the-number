@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons"
 import NumberContainer from "../components/NumberContainer"
 import Card from "../components/Card"
 import MainButton from "../components/MainButton"
+import BodyText from "../components/BodyText"
 import DefaultStyles from "../constants/default-styles"
 
 const generateRandomBetween = (min, max, exclude) => {
@@ -39,8 +40,15 @@ const GameScreen = props => {
         }
         const newNumber = generateRandomBetween(currentLow.current, currentHigh.current, currentGuess)
         setCurrentGuess(newNumber);
-        setPastGuesses(curPastGuesses => [newNumber,...curPastGuesses])
+        setPastGuesses(curPastGuesses => [newNumber, ...curPastGuesses])
     }
+
+    const renderListItem = (value, numOfRounds) => (
+        <View key={value} style={styles.listItem}>
+            <BodyText>#{numOfRounds}</BodyText>
+            <BodyText>{value}</BodyText>
+        </View>
+    )
 
     useEffect(() => {
         if (currentGuess === userChoice) {
@@ -60,13 +68,9 @@ const GameScreen = props => {
                     <Ionicons name="md-add" color="white" size={24} />
                 </MainButton>
             </Card>
-            <ScrollView>
-                {pastGuesses.map((guess) =>
-                    <View key={guess}>
-                        <Text>{guess}</Text>
-                    </View>
-                )}
-            </ScrollView>
+            <View style={styles.list}>
+                <ScrollView>{pastGuesses.map((guess, index) =>renderListItem(guess, pastGuesses.length - index))}</ScrollView>
+            </View>
         </View>
     )
 }
@@ -83,6 +87,19 @@ const styles = StyleSheet.create({
         marginTop: 20,
         width: 400,
         maxWidth: "90%"
+    },
+    listItem: {
+        flexDirection: "row",
+        borderColor: "#ccc",
+        borderWidth: 1,
+        backgroundColor: "white",
+        padding: 15,
+        marginVertical: 10,
+        justifyContent: "space-between"
+    },
+    list:{
+        width: "80%",
+        flex: 1,
     }
 })
 
