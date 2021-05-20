@@ -62,7 +62,6 @@ const GameScreen = props => {
                 </MainButton>
             </Card>
             <GuessFlatList pastGuesses={pastGuesses}/>
-            {/*<GuessScrollview pastGuesses={pastGuesses}/>*/}
         </View>
     )
 }

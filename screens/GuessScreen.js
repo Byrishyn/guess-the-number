@@ -6,6 +6,7 @@ import Input from "../components/Input"
 import NumberContainer from "../components/NumberContainer"
 import Card from "../components/Card"
 import Colors from "../constants/colors"
+import GuessScrollview from "../components/GuessScrollview"
 
 const GuessScreen = props => {
     const [enteredValue, setEnteredValue] = useState("")
@@ -35,11 +36,12 @@ const GuessScreen = props => {
             return;
         }
         setEnteredValue("");
-        setPastGuesses(curr => [choosenNumber, ...curr])
         if (choosenNumber > computerNumber.current) {
             setComputerAnswer("-")
+            setPastGuesses(curr => [choosenNumber + " -", ...curr])
         } else if (choosenNumber < computerNumber.current) {
             setComputerAnswer("+")
+            setPastGuesses(curr => [choosenNumber + " +", ...curr])
         } else {
             setCurrentGuess(choosenNumber)
         }
@@ -71,6 +73,7 @@ const GuessScreen = props => {
                     </View>
                 </View>
             </Card>
+            <GuessScrollview pastGuesses={pastGuesses}/>
         </View>
     )
 }
