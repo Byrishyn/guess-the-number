@@ -63,7 +63,7 @@ export default function App() {
   if (userNumber && guessRounds <=0) {
     content = <GameScreen userChoice={userNumber} onGameOver ={gameOverHandler} />
   } else if (guessRounds > 0) {
-    content = <GameOverScreen userNumber={userNumber} numberRounds={guessRounds} onNewGame={newGameHandler} />
+    content = <GameOverScreen userNumber={userNumber} numberRounds={guessRounds} computerGuess={computerGuess} onNewGame={newGameHandler} />
   }
 
 

@@ -9,8 +9,7 @@ import Colors from "../constants/colors"
 
 const GuessScreen = props => {
     const [enteredValue, setEnteredValue] = useState("")
-    //const computerNumber = useRef(Math.floor(Math.random() * 100))
-    const computerNumber = useRef(25)
+    const computerNumber = useRef(Math.floor(Math.random() * 100))
     const [computerAnswer, setComputerAnswer] = useState("?")
     const [currentGuess, setCurrentGuess] = useState()
     const [pastGuesses, setPastGuesses] = useState([])

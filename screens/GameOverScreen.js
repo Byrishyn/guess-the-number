@@ -7,6 +7,15 @@ import MainButton from "../components/MainButton"
 import Colors from '../constants/colors';
 
 const GameOverScreen = props => {
+    var text = "";
+
+    if (!props.computerGuess){
+        text = "It took you "
+    } else {
+        text = "It took your phone "
+    }
+
+
     return (
         <View style={styles.screen} >
             <TitleText>The game is over !</TitleText>
@@ -19,7 +28,7 @@ const GameOverScreen = props => {
             </View>
             <View style={styles.resultContainer}>
                 <BodyText style={styles.resultText}>
-                    It took your phone{" "}
+                    {text}
                     <Text style={styles.highlight}>{props.numberRounds}</Text>
                     {" "}rounds to guess the number{" "}
                     <Text style={styles.highlight}>{props.userNumber}</Text>
