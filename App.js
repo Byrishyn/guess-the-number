@@ -7,6 +7,7 @@ import Header from "./components/Header"
 import StartGameScreen from "./screens/StartGameScreen"
 import GameScreen from "./screens/GameScreen"
 import GameOverScreen from "./screens/GameOverScreen"
+import GameSelectionScreen from "./screens/GameSelectionScreen"
 
 const FetchFonts = () => {
   return Font.loadAsync({
@@ -16,6 +17,7 @@ const FetchFonts = () => {
 }
 
 export default function App() {
+  const [computerGuess, setComputerGuess] = useState();
   const [userNumber, setUserNumber] = useState();
   const [guessRounds, setGuessRounds] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -28,6 +30,7 @@ export default function App() {
   const newGameHandler = () => {
     setGuessRounds(0);
     setUserNumber(null);
+    setComputerGuess(null)
   }
 
   const gameStartHandler = (selectedNumber) => {
@@ -39,7 +42,15 @@ export default function App() {
     setGuessRounds(nbrRounds);
   }
 
-  let content = <StartGameScreen onStartGame={gameStartHandler} />
+  const gameChoiceHandler = (choice) => {
+    setComputerGuess(choice)
+  }
+
+  let content = <GameSelectionScreen setComputerGuess={gameChoiceHandler} />
+
+  if (computerGuess === true) {
+    content = <StartGameScreen onStartGame={gameStartHandler} />
+  } 
 
   if (userNumber && guessRounds <=0) {
     content = <GameScreen userChoice={userNumber} onGameOver ={gameOverHandler} />
