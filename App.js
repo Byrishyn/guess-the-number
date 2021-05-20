@@ -6,6 +6,7 @@ import AppLoading from 'expo-app-loading';
 import Header from "./components/Header"
 import StartGameScreen from "./screens/StartGameScreen"
 import GameScreen from "./screens/GameScreen"
+import GuessScreen from "./screens/GuessScreen"
 import GameOverScreen from "./screens/GameOverScreen"
 import GameSelectionScreen from "./screens/GameSelectionScreen"
 
@@ -50,7 +51,9 @@ export default function App() {
 
   if (computerGuess === true) {
     content = <StartGameScreen onStartGame={gameStartHandler} />
-  } 
+  } else if (computerGuess === false) {
+    content = <GuessScreen />
+  }
 
   if (userNumber && guessRounds <=0) {
     content = <GameScreen userChoice={userNumber} onGameOver ={gameOverHandler} />

@@ -10,7 +10,7 @@ const GameSelectionScreen = props => {
             <TitleText style={styles.title}>Who's guessing ?</TitleText>
             <View style={styles.buttonContainer}>
                 <MainButton onPress={() => props.setComputerGuess(true)}>The computer !</MainButton>
-                <MainButton onPress={() => props.setComputerGuess(true)}>Me !</MainButton>
+                <MainButton onPress={() => props.setComputerGuess(false)}>Me !</MainButton>
             </View>
         </View>
     )
