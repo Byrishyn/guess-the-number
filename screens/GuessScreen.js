@@ -2,11 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, View, Alert, Button, Keyboard } from 'react-native'
 
 import BodyText from "../components/BodyText"
-import Input from "../components/Input"
+import TitleText from "../components/TitleText"
 import NumberContainer from "../components/NumberContainer"
-import Card from "../components/Card"
-import Colors from "../constants/colors"
 import GuessScrollview from "../components/GuessScrollview"
+import NumberInputCard from "../components/NumberInputCard"
+import Card from "../components/Card"
 
 const GuessScreen = props => {
     const [enteredValue, setEnteredValue] = useState("")
@@ -14,20 +14,14 @@ const GuessScreen = props => {
     const [computerAnswer, setComputerAnswer] = useState("?")
     const [currentGuess, setCurrentGuess] = useState()
     const [pastGuesses, setPastGuesses] = useState([])
+    const currentLow = useRef(0);
+    const currentHigh = useRef(100);
 
     useEffect(() => {
         if (currentGuess === computerNumber.current) {
             props.onGameOver(pastGuesses.length, currentGuess);
         }
     }, [currentGuess])
-
-    const numberInputHandler = inputText => {
-        setEnteredValue(inputText.replace(/[^0-9]/g, ""))
-    }
-
-    const resetInputHandler = () => {
-        setEnteredValue("");
-    }
 
     const confirmInputHandler = () => {
         const choosenNumber = parseInt(enteredValue)
@@ -37,11 +31,13 @@ const GuessScreen = props => {
         }
         setEnteredValue("");
         if (choosenNumber > computerNumber.current) {
-            setComputerAnswer("-")
-            setPastGuesses(curr => [choosenNumber + " -", ...curr])
+            setComputerAnswer("Lower")
+            currentHigh.current = choosenNumber;
+            setPastGuesses(curr => ["<" + choosenNumber, ...curr])
         } else if (choosenNumber < computerNumber.current) {
-            setComputerAnswer("+")
-            setPastGuesses(curr => [choosenNumber + " +", ...curr])
+            setComputerAnswer("Greater")
+            currentLow.current = choosenNumber;
+            setPastGuesses(curr => [">" + choosenNumber, ...curr])
         } else {
             setCurrentGuess(choosenNumber)
         }
@@ -52,28 +48,11 @@ const GuessScreen = props => {
         <View style={styles.screen}>
             <BodyText>Opponent's answer</BodyText>
             <NumberContainer>{computerAnswer}</NumberContainer>
-            <Card style={styles.inputContainer}>
-                <BodyText>Select a Number</BodyText>
-                <Input
-                    style={styles.input}
-                    blurOnSubmit
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    keyboardType="number-pad"
-                    maxLength={2}
-                    onChangeText={numberInputHandler}
-                    value={enteredValue}
-                />
-                <View style={styles.buttonContainer}>
-                    <View style={styles.button}>
-                        <Button title="Reset" onPress={resetInputHandler} color={Colors.accent} />
-                    </View>
-                    <View style={styles.button}>
-                        <Button title="Submit" onPress={confirmInputHandler} color={Colors.primary} />
-                    </View>
-                </View>
+            <NumberInputCard onConfirm={confirmInputHandler} enteredValue={enteredValue} setEnteredValue={setEnteredValue} />
+            <Card style={styles.summaryContainer}>
+                <TitleText>{currentLow.current + " < ? < " + currentHigh.current}</TitleText>
             </Card>
-            <GuessScrollview pastGuesses={pastGuesses}/>
+            <GuessScrollview pastGuesses={pastGuesses} />
         </View>
     )
 }
@@ -84,33 +63,10 @@ const styles = StyleSheet.create({
         padding: 10,
         alignItems: "center",
     },
-    buttonContainer: {
-        flexDirection: "row",
-        width: "100%",
-        justifyContent: "space-between",
-        paddingHorizontal: 15,
-    },
-    title: {
-        fontSize: 20,
-        marginVertical: 10,
-        fontFamily: "open-sans-bold"
-    },
-    button: {
-        width: 100
-    },
-    input: {
-        width: 50,
-        textAlign: "center"
-    },
     summaryContainer: {
-        marginTop: 20,
-        alignItems: "center",
-    },
-    inputContainer: {
-        width: 300,
-        maxWidth: "80%",
-        alignItems: "center",
-    },
+      marginTop: 10,
+      alignItems: "center",
+    }
 })
 
 export default GuessScreen;
